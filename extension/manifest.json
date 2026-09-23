@@ -1,0 +1,28 @@
+{
+  "manifest_version": 3,
+  "name": "StayVerify",
+  "version": "1.0",
+  "description": "Hotel Listing Scam & Authenticity Detector for Google Hotels.",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "*://www.google.com/travel/hotels/*",
+    "*://www.google.com/travel/search*",
+    "http://localhost:3000/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "*://www.google.com/travel/*"
+      ],
+      "js": ["content.js"],
+      "css": ["content.css"],
+      "run_at": "document_end"
+    }
+  ],
+  "action": {}
+}
