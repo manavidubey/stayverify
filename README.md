@@ -21,10 +21,24 @@ StayVerify is an intelligent tool designed to protect travelers from fraudulent 
 StayVerify consists of two main components:
 
 1. **The Backend (Next.js)**
-   Located in the `src/` directory. This is the powerhouse that handles API requests from the extension. It orchestrates Puppeteer for data gathering, runs AI models, and queries external APIs (Google Cloud Vision, WHOIS).
+   Located in the `src/` directory. This is the powerhouse that handles API requests from the extension. It orchestrates Puppeteer for data gathering, runs signal detectors (Vision, WHOIS), and aggregates the state. It then utilizes **typesafe-ai/jev** (`experimental_evaluate` from the Vercel AI SDK) to evaluate this state against strict criteria, returning deterministic, type-safe JSON for the extension.
 
 2. **The Extension (Chrome Manifest V3)**
    Located in the `extension/` directory. A lightweight content script that injects non-intrusive UI elements into Google Hotels, communicating with the backend to retrieve and display trust scores.
+
+---
+
+## 🦸‍♂️ The Hero of the Stack: Jev
+
+While traditional AI applications rely on massive, conversational LLMs that require endless prompt engineering and are prone to hallucinations (like returning invalid JSON), **StayVerify uses Jev (`typesafe-ai/jev`) as its brain.**
+
+Jev is a specialized, type-safe evaluator that takes the chaos out of AI decision-making. Here is why Jev is the hero of our architecture:
+
+1. **State-Driven, Not Prompt-Driven**: Instead of feeding a model messy HTML or paragraphs of text, our backend first runs dedicated computer vision and heuristic detectors. It compiles these signals into a clean, structured JSON `state` object.
+2. **Ironclad Type Safety**: Jev evaluates this `state` against strict, predefined criteria (e.g., scoring risk on a scale, or choosing from a strict set of enums). The output is mathematically guaranteed to match the expected schema—meaning the Chrome extension will *never* crash due to a malformed AI response.
+3. **Determinism at the Edge**: By removing the conversational fluff and focusing purely on state evaluation, Jev makes StayVerify incredibly fast, cheap, and reliable enough to run on every single hotel listing a user browses.
+
+In short, Jev transforms fuzzy, unpredictable AI logic into a rock-solid, enterprise-grade decision engine.
 
 ---
 
@@ -84,7 +98,7 @@ Follow these instructions to get the StayVerify backend and extension running lo
 - **Extension**: Chrome Manifest V3 (JavaScript, CSS)
 - **Web Scraping**: Puppeteer
 - **Computer Vision**: `@google-cloud/vision`
-- **AI/ML**: `@xenova/transformers`, `ai`
+- **AI/ML**: `typesafe-ai/jev` (for strict, type-safe state evaluation), `@xenova/transformers`, `ai`
 - **Domain Tools**: `whois-json`
 - **Icons**: Lucide React
 
