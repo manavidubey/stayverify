@@ -36,7 +36,8 @@ Jev is a specialized, type-safe evaluator that takes the chaos out of AI decisio
 
 1. **State-Driven, Not Prompt-Driven**: Instead of feeding a model messy HTML or paragraphs of text, our backend first runs dedicated computer vision and heuristic detectors. It compiles these signals into a clean, structured JSON `state` object.
 2. **Ironclad Type Safety**: Jev evaluates this `state` against strict, predefined criteria (e.g., scoring risk on a scale, or choosing from a strict set of enums). The output is mathematically guaranteed to match the expected schema—meaning the Chrome extension will *never* crash due to a malformed AI response.
-3. **Determinism at the Edge**: By removing the conversational fluff and focusing purely on state evaluation, Jev makes StayVerify incredibly fast, cheap, and reliable enough to run on every single hotel listing a user browses.
+3. **Built-in Uncertainty Flagging**: Jev evaluates edge cases with a `needs_human_review` boolean flag. If the AI is uncertain or lacks sufficient data, the listing is deterministically routed to a human reviewer rather than blindly guessing.
+4. **Determinism at the Edge**: By removing the conversational fluff and focusing purely on state evaluation, Jev makes StayVerify incredibly fast, cheap, and reliable enough to run on every single hotel listing a user browses.
 
 In short, Jev transforms fuzzy, unpredictable AI logic into a rock-solid, enterprise-grade decision engine.
 
